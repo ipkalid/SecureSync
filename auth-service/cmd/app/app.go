@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -30,9 +31,10 @@ func NewApp() *App {
 
 func (a *App) Start() {
 	defer a.DB.Close()
-	server := &http.Server{Addr: ":3000", Handler: a.router()}
+	server := &http.Server{Addr: ":80", Handler: a.router()}
 
-	log.Println("server is running on http://localhost:3000")
+	externalPort := os.Getenv("EX_PORT")
+	log.Printf("server is running on http://localhost:%s\n", externalPort)
 
 	err := server.ListenAndServe()
 	if err != nil {

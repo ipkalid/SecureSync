@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+
+  auth-service:
+    build:
+      context: ./../auth-service
+      dockerfile: ./../auth-service/dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 1234
+      DB_NAME: users
+      EX_PORT: 8080
+  # -----------------------------
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: users
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  # -----------------------------
+  mail-service:
+    build:
+      context: ./../mail-service
+      dockerfile: ./../mail-service/dockerfile
+    ports:
+      - "8081:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EMAIL_DOMAIN: email
+      EMAIL_PASSWORD: password
+      EX_PORT: 8081
+  # -----------------------------
+  policy-service:
+    build:
+      context: ./../policy-service
+      dockerfile: ./../policy-service/dockerfile
+    ports:
+      - "8082:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EX_PORT: 8082
+
+volumes:
+  postgres_data:

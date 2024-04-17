@@ -4,19 +4,20 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = "5432"
-	user     = "postgres"
-	password = "mysecretpassword"
-	dbname   = "securesync"
-	sslmode  = "disable"
-)
+// const (
+// 	host     = "localhost"
+// 	port     = "5432"
+// 	user     = "postgres"
+// 	password = "1234"
+// 	dbname   = "users"
+// 	sslmode  = "disable"
+// )
 
 type DataBaseConfig struct {
 	Host     string
@@ -30,6 +31,7 @@ type DataBaseConfig struct {
 var counts int64
 
 func (dbc DataBaseConfig) String() string {
+
 	return fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=%s",
 		dbc.Host, dbc.Port, dbc.User, dbc.Password, dbc.DBName, dbc.SSLMode)
@@ -41,8 +43,8 @@ func setUpTables(db *sql.DB) error {
 		CREATE TABLE IF NOT EXISTS Users (
 			id SERIAL PRIMARY KEY,
 			email VARCHAR(255) UNIQUE NOT NULL,
-			firstName VARCHAR(255) UNIQUE NOT NULL,
-			lastName VARCHAR(255) UNIQUE NOT NULL,
+			firstName VARCHAR(255)  NOT NULL,
+			lastName VARCHAR(255)  NOT NULL,
 			password VARCHAR(255) NOT NULL,
 			active    INTEGER DEFAULT 0,
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -102,6 +104,12 @@ func openDB(dataSourceName string) (*sql.DB, error) {
 }
 
 func connectToDB() *sql.DB {
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	sslmode := "disable"
 	dpConfig := DataBaseConfig{Host: host, Port: port, User: user, Password: password, DBName: dbname, SSLMode: sslmode}
 
 	dsn := dpConfig.String()
@@ -113,6 +121,7 @@ func connectToDB() *sql.DB {
 			counts++
 		} else {
 			log.Println("Connected to Postgres!")
+			fmt.Println(dsn)
 			return connection
 		}
 

@@ -30,8 +30,6 @@ func (a *App) Start(addr ...string) {
 	}
 	server := &http.Server{Addr: address, Handler: a.router()}
 
-	log.Printf("server is running on http://localhost%s\n", address)
-
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)

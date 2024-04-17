@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/smtp"
+	"os"
 	"regexp"
 
 	"github.com/go-chi/chi/v5"
@@ -16,9 +17,10 @@ func main() {
 
 	r.Post("/mail/sendEmail", sendMailHandler)
 
-	fmt.Println("Start server as port 3001 link: http://localhost:3001")
+	externalPort := os.Getenv("EX_PORT")
+	log.Printf("server is running on http://localhost:%s\n", externalPort)
 
-	err := http.ListenAndServe(":3001", r)
+	err := http.ListenAndServe(":80", r)
 	if err != nil {
 		panic(err)
 	}
@@ -57,8 +59,8 @@ func sendMailHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 func sendEmil(toEmail string, subject string, body string) error {
-	from := "ipasxx@gmail.com"
-	pass := "rayn vqjj yvuw rorf"
+	from := os.Getenv("EMAIL_DOMAIN")
+	pass := os.Getenv("EMAIL_PASSWORD")
 	to := toEmail
 
 	msg := "From: " + from + "\n" +
