@@ -5,33 +5,26 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"google.golang.org/api/androidmanagement/v1"
 )
 
-// LoadRouter returns an http.Handler that handles the routing for the order API.
 func (a *App) router() http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
 	router.Use(ContentTypeMiddleware("application/json"))
 
-	router.Route("/mdm/policy", a.loadPolicyRoute)
-
-	router.Get("/test", func(w http.ResponseWriter, r *http.Request) {
-		a.AMC.service.Enterprises.Create(&androidmanagement.Enterprise{})
-	})
+	router.Route("/mdm/enrollment", a.loadEnrollmentRoute)
 
 	return router
 
 }
 
-func (a *App) loadPolicyRoute(router chi.Router) {
+func (a *App) loadEnrollmentRoute(router chi.Router) {
 
-	router.Get("/", a.loadAllPolicy)
-	router.Post("/", a.postPolicy)
-	router.Patch("/", a.patchPolicy)
-	router.Delete("/{name}", a.deletePolicy)
-	router.Get("/{name}", a.getPolicy)
+	router.Get("/", a.LoadAllEnrollmentTokens)
+	router.Post("/", a.NewEnrollmentToken)
+	router.Delete("/{name}", a.deleteEnrollmentToken)
+	router.Get("/{name}", a.getEnrollmentToken)
 
 }
 

@@ -1,6 +1,27 @@
 version: '3.8'
 services:
 
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+  # -----------------------------
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: users
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  # -----------------------------
   auth-service:
     build:
       context: ./../auth-service
@@ -20,17 +41,6 @@ services:
       DB_PASSWORD: 1234
       DB_NAME: users
       EX_PORT: 8080
-  # -----------------------------
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: users
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
   # -----------------------------
   mail-service:
     build:
@@ -52,13 +62,42 @@ services:
       context: ./../policy-service
       dockerfile: ./../policy-service/dockerfile
     ports:
-      - "8082:80"
+      - "8083:80"
     restart: always
     deploy:
       mode: replicated
       replicas: 1
     environment:
-      EX_PORT: 8082
+      EX_PORT: 8083
+
+  # -----------------------------
+  device-service:
+    build:
+      context: ./../device-service
+      dockerfile: ./../device-service/dockerfile
+    ports:
+      - "8084:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EX_PORT: 8084
+
+  # -----------------------------
+  enrollment-service:
+    build:
+      context: ./../enrollment-service
+      dockerfile: ./../enrollment-service/dockerfile
+    ports:
+      - "8085:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EX_PORT: 8085
 
 volumes:
   postgres_data:
+  mongodb_data:
