@@ -20,10 +20,11 @@ func (a *App) router() http.Handler {
 }
 
 func (a *App) loadEnrollmentRoute(router chi.Router) {
-	router.Get("/", a.getAllDevices)
-	router.Post("/updateDevicePolicy", a.updateDevicePolicy)
 	router.Delete("/{name}", a.deleteDevice)
 	router.Get("/{name}", a.getDevice)
+	router.Post("/updateDevicePolicy", a.updateDevicePolicy)
+	router.Get("/", a.getAllDevices)
+
 }
 
 func ContentTypeMiddleware(contentType string) func(next http.Handler) http.Handler {

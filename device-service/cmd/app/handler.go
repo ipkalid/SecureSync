@@ -25,7 +25,7 @@ func (a *App) getAllDevices(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getDevice(w http.ResponseWriter, r *http.Request) {
-	deviceId := chi.URLParam(r, "deviceId")
+	deviceId := chi.URLParam(r, "name")
 
 	device, err := a.AMC.GetDevice(deviceId)
 	if err != nil {
@@ -67,7 +67,7 @@ func (a *App) updateDevicePolicy(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteDevice(w http.ResponseWriter, r *http.Request) {
-	deviceId := chi.URLParam(r, "deviceId")
+	deviceId := chi.URLParam(r, "name")
 
 	err := a.AMC.DeleteDevice(deviceId)
 	if err != nil {
