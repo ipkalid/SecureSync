@@ -12,7 +12,7 @@ import (
 func (u *User) GetAll() ([]*User, error) {
 
 	query := `select id, email, firstname, lastname, active, created_at, updated_at
-	from users order by last_name`
+	from users order by id`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -29,7 +29,6 @@ func (u *User) GetAll() ([]*User, error) {
 			&user.Email,
 			&user.FirstName,
 			&user.LastName,
-			&user.Password,
 			&user.Active,
 			&user.CreatedAt,
 			&user.UpdatedAt,

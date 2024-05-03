@@ -16,6 +16,8 @@ func (a *App) router() http.Handler {
 
 	router.Route("/auth", a.loadAuthenticationRoute)
 
+	router.Get("/users", a.GetAllUsers)
+
 	return router
 
 }
