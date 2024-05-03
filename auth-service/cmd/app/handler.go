@@ -10,6 +10,18 @@ import (
 	"github.com/ipkalid/go-common/json_helpers"
 )
 
+func (a App) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+
+	users, err := a.Models.User.GetAll()
+	if err != nil {
+		json_helpers.ErrorJSON(w, fmt.Errorf("no users"), http.StatusBadRequest)
+		return
+	}
+
+	json_helpers.WriteJSON(w, http.StatusAccepted, users)
+
+}
+
 func (a App) Register(w http.ResponseWriter, r *http.Request) {
 	var requestPayload struct {
 		Email     string `json:"email"`
