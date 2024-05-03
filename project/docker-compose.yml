@@ -22,19 +22,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  # -----------------------------
   auth-service:
-    build:
-      context: ./../auth-service
-      dockerfile: ./../auth-service/dockerfile
+    image: gcr.io/mdm-mx/auth-service:latest
     ports:
       - "8080:80"
     depends_on:
       - db
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -42,63 +36,36 @@ services:
       DB_PASSWORD: 1234
       DB_NAME: users
       EX_PORT: 8080
-  # -----------------------------
   mail-service:
-    build:
-      context: ./../mail-service
-      dockerfile: ./../mail-service/dockerfile
+    image: gcr.io/mdm-mx/mail-service:latest
     ports:
       - "8081:80"
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
       EMAIL_DOMAIN: email
       EMAIL_PASSWORD: password
       EX_PORT: 8081
-  # -----------------------------
   policy-service:
-    build:
-      context: ./../policy-service
-      dockerfile: ./../policy-service/dockerfile
+    image: gcr.io/mdm-mx/policy-service:latest
     ports:
       - "8083:80"
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
       EX_PORT: 8083
-
-  # -----------------------------
   device-service:
-    build:
-      context: ./../device-service
-      dockerfile: ./../device-service/dockerfile
+    image: gcr.io/mdm-mx/device-service:latest
     ports:
       - "8084:80"
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
       EX_PORT: 8084
-
-  # -----------------------------
   enrollment-service:
-    build:
-      context: ./../enrollment-service
-      dockerfile: ./../enrollment-service/dockerfile
+    image: gcr.io/mdm-mx/enrollment-service:latest
     ports:
       - "8085:80"
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
       EX_PORT: 8085
-
 volumes:
   postgres_data:
   # mongodb_data:

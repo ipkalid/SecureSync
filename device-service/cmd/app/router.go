@@ -24,6 +24,7 @@ func (a *App) loadDeviceRoute(router chi.Router) {
 	router.Post("/updateDevicePolicy", a.updateDevicePolicy)
 	router.Delete("/{name}", a.deleteDevice)
 	router.Get("/{name}", a.getDevice)
+
 }
 
 func ContentTypeMiddleware(contentType string) func(next http.Handler) http.Handler {
