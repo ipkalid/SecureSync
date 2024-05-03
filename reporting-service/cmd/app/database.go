@@ -1,13 +1,15 @@
 package app
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
 	_ "github.com/lib/pq"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // const (
@@ -25,102 +27,48 @@ type DataBaseConfig struct {
 	User     string
 	Password string
 	DBName   string
-	SSLMode  string
 }
 
 var counts int64
 
 func (dbc DataBaseConfig) String() string {
 
-	return fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=%s",
-		dbc.Host, dbc.Port, dbc.User, dbc.Password, dbc.DBName, dbc.SSLMode)
+	return fmt.Sprintf("mongodb://%s:%s@%s:%s/%s",
+		dbc.User, dbc.Password,
+		dbc.Host, dbc.Port, dbc.DBName)
 
 }
 
-func setUpTables(db *sql.DB) error {
-	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS Users (
-			id SERIAL PRIMARY KEY,
-			email VARCHAR(255) UNIQUE NOT NULL,
-			firstName VARCHAR(255)  NOT NULL,
-			lastName VARCHAR(255)  NOT NULL,
-			password VARCHAR(255) NOT NULL,
-			active    INTEGER DEFAULT 0,
-			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-		);
+func openDB(dataSourceName string) (*mongo.Client, error) {
 
-		CREATE TABLE IF NOT EXISTS Roles (
-			id SERIAL PRIMARY KEY,
-			name VARCHAR(255) UNIQUE NOT NULL
-		);
-
-		CREATE TABLE IF NOT EXISTS User_Roles (
-			user_id INTEGER REFERENCES Users(id),
-			role_id INTEGER REFERENCES Roles(id),
-			PRIMARY KEY (user_id, role_id)
-		);
-
-		CREATE TABLE IF NOT EXISTS Refresh_Tokens (
-			id SERIAL PRIMARY KEY,
-			user_id INTEGER REFERENCES Users(id),
-			token VARCHAR(255) NOT NULL
-		);
-
-		
-
-		INSERT INTO public.roles (id, name)
-		VALUES (1, 'normal')
-		ON CONFLICT (id) DO NOTHING;
-
-		INSERT INTO public.roles (id, name)
-		VALUES (2, 'manager')
-		ON CONFLICT (id) DO NOTHING;
-
-		INSERT INTO public.roles (id, name)
-		VALUES (3, 'admin')
-		ON CONFLICT (id) DO NOTHING;
-	`)
-
+	ctx := context.TODO()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dataSourceName))
 	if err != nil {
-		return err
+		panic(err)
 	}
-	return nil
+	err = client.Ping(ctx, nil)
+
+	return client, nil
 }
 
-func openDB(dataSourceName string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dataSourceName)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
-func connectToDB() *sql.DB {
+func connectToDB() *mongo.Client {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
-	sslmode := "disable"
-	dpConfig := DataBaseConfig{Host: host, Port: port, User: user, Password: password, DBName: dbname, SSLMode: sslmode}
+
+	dpConfig := DataBaseConfig{Host: host, Port: port, User: user, Password: password, DBName: dbname}
 
 	dsn := dpConfig.String()
 
 	for {
 		connection, err := openDB(dsn)
 		if err != nil {
-			log.Println("Postgres not yet ready ...")
+			log.Println("MongoDb not yet ready ...")
 			counts++
 		} else {
-			log.Println("Connected to Postgres!")
+			log.Println("Connected to MongoDb!")
 			fmt.Println(dsn)
 			return connection
 		}
@@ -135,3 +83,50 @@ func connectToDB() *sql.DB {
 		continue
 	}
 }
+
+// // MONGO_INITDB_ROOT_USERNAME: root
+// 	// MONGO_INITDB_ROOT_PASSWORD: example
+// 	uri := "mongodb://root:example@localhost:27017"
+
+// 	ctx := context.TODO()
+// 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	err = client.Ping(ctx, nil)
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println("hello world")
+// 	databases, err := client.ListDatabaseNames(ctx, bson.M{})
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	fmt.Println("Databases:")
+// 	for _, database := range databases {
+// 		fmt.Println(database)
+// 	}
+// 	coll := client.Database("test").Collection("users")
+
+// 	cursor, err := coll.Find(ctx, bson.M{})
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	var results []interface{}
+// 	if err = cursor.All(context.TODO(), &results); err != nil {
+// 		panic(err)
+// 	}
+// 	println(len(results))
+
+// 	// Prints the results of the find operation as structs
+// 	// for _, result := range results {
+// 	// cursor.Decode(&result)
+// 	output, err := json.MarshalIndent(results, "", "    ")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Printf("%s\n", output)
+// 	// }

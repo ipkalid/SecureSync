@@ -1,34 +1,76 @@
 package main
 
-import (
-	"reporting-service/cmd/app"
+// import (
+// 	"reporting-service/cmd/app"
 
-	"log"
+// 	"log"
+// )
+
+// func main() {
+
+// 	log.Println("Starting authentication service")
+// 	app := app.NewApp()
+
+// 	app.Start()
+// }
+
+// package main
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// @title           Swagger Example API
-// @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
-
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
-
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host      localhost:8080
-// @BasePath  /api/v1
-
-// @securityDefinitions.basic  BasicAuth
-
-// @externalDocs.description  OpenAPI
-// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
+	// MONGO_INITDB_ROOT_USERNAME: root
+	// MONGO_INITDB_ROOT_PASSWORD: example
+	uri := "mongodb://root:example@localhost:27017"
 
-	log.Println("Starting authentication service")
-	app := app.NewApp()
+	ctx := context.TODO()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	if err != nil {
+		panic(err)
+	}
+	err = client.Ping(ctx, nil)
 
-	app.Start()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("hello world")
+	databases, err := client.ListDatabaseNames(ctx, bson.M{})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Databases:")
+	for _, database := range databases {
+		fmt.Println(database)
+	}
+	coll := client.Database("test").Collection("users")
+
+	cursor, err := coll.Find(ctx, bson.M{})
+	if err != nil {
+		panic(err)
+	}
+
+	var results []interface{}
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err)
+	}
+	println(len(results))
+
+	// Prints the results of the find operation as structs
+	// for _, result := range results {
+	// cursor.Decode(&result)
+	output, err := json.MarshalIndent(results, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s\n", output)
+	// }
+
 }

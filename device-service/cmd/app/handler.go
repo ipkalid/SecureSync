@@ -29,14 +29,16 @@ func (a *App) getDevice(w http.ResponseWriter, r *http.Request) {
 
 	device, err := a.AMC.GetDevice(deviceId)
 	if err != nil {
-		json_helpers.ErrorJSON(w, fmt.Errorf("error loading data"), http.StatusBadRequest)
+		json_helpers.ErrorJSON(w, fmt.Errorf("device not found"), http.StatusBadRequest)
 		return
 	}
+
 	payload := json_helpers.JsonResponse{
 		Error:   false,
 		Message: "success",
 		Data:    device,
 	}
+
 	json_helpers.WriteJSON(w, http.StatusAccepted, payload)
 }
 
