@@ -13,13 +13,13 @@ func (a *App) router() http.Handler {
 	router.Use(middleware.Logger)
 	router.Use(ContentTypeMiddleware("application/json"))
 
-	router.Route("/mdm/device", a.loadEnrollmentRoute)
+	router.Route("/mdm/device", a.loadDeviceRoute)
 
 	return router
 
 }
 
-func (a *App) loadEnrollmentRoute(router chi.Router) {
+func (a *App) loadDeviceRoute(router chi.Router) {
 	router.Get("/", a.getAllDevices)
 	router.Post("/updateDevicePolicy", a.updateDevicePolicy)
 	router.Delete("/{name}", a.deleteDevice)

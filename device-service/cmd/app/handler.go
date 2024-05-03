@@ -25,18 +25,20 @@ func (a *App) getAllDevices(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getDevice(w http.ResponseWriter, r *http.Request) {
-	deviceId := chi.URLParam(r, "deviceId")
+	deviceId := chi.URLParam(r, "name")
 
 	device, err := a.AMC.GetDevice(deviceId)
 	if err != nil {
-		json_helpers.ErrorJSON(w, fmt.Errorf("error loading data"), http.StatusBadRequest)
+		json_helpers.ErrorJSON(w, fmt.Errorf("device not found"), http.StatusBadRequest)
 		return
 	}
+
 	payload := json_helpers.JsonResponse{
 		Error:   false,
 		Message: "success",
 		Data:    device,
 	}
+
 	json_helpers.WriteJSON(w, http.StatusAccepted, payload)
 }
 
@@ -67,7 +69,7 @@ func (a *App) updateDevicePolicy(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteDevice(w http.ResponseWriter, r *http.Request) {
-	deviceId := chi.URLParam(r, "deviceId")
+	deviceId := chi.URLParam(r, "name")
 
 	err := a.AMC.DeleteDevice(deviceId)
 	if err != nil {
