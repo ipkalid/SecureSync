@@ -14,7 +14,7 @@ The SecureSync platform consists of the following services:
 - Golang: Used for backend services.
 - Docker: Containers for deploying and managing applications.
 - Kubernetes: Orchestration of the containerized applications.
-- React Native: Development of the frontend service.
+- React: Development of the frontend service.
 - Postgres: Database for relational data management.
 - MongoDB: Database for document-oriented data storage.
 ## Setup Process
