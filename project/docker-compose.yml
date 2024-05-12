@@ -98,6 +98,19 @@ services:
       replicas: 1
     environment:
       EX_PORT: 8085
+  # -----------------------------
+  configuration-service:
+    build:
+      context: ./../configuration-service
+      dockerfile: ./../configuration-service/dockerfile
+    ports:
+      - "8085:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EX_PORT: 8086
 
 volumes:
   postgres_data:
