@@ -52,7 +52,7 @@ func deviceSettingsOptions(w http.ResponseWriter, _ *http.Request) {
 		Message: "success",
 		Data:    deviceSettingsOptions,
 	}
-	json_helpers.WriteJSON(w, http.StatusAccepted, payload)
+	json_helpers.WriteJSON(w, http.StatusOK, payload)
 
 }
 
@@ -119,6 +119,6 @@ func getApps(w http.ResponseWriter, r *http.Request) {
 		Message: "success",
 		Data:    apps,
 	}
-	json_helpers.WriteJSON(w, http.StatusAccepted, payload)
+	json_helpers.WriteJSON(w, http.StatusOK, payload)
 
 }
