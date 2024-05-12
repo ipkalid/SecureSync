@@ -1,16 +1,16 @@
 version: '3.8'
 services:
 
-  # mongodb:
-  #   image: mongo:latest
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: example
-  #     MONGO_INITDB_DATABASE: secure_sync
-  #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - mongodb_data:/data/db
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: secure_sync
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
   # -----------------------------
   db:
     image: postgres:latest
@@ -22,13 +22,19 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  # -----------------------------
   auth-service:
-    image: gcr.io/mdm-mx/auth-service:latest
+    build:
+      context: ./../auth-service
+      dockerfile: ./../auth-service/dockerfile
     ports:
       - "8080:80"
     depends_on:
       - db
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -36,36 +42,76 @@ services:
       DB_PASSWORD: 1234
       DB_NAME: users
       EX_PORT: 8080
+  # -----------------------------
   mail-service:
-    image: gcr.io/mdm-mx/mail-service:latest
+    build:
+      context: ./../mail-service
+      dockerfile: ./../mail-service/dockerfile
     ports:
       - "8081:80"
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
     environment:
       EMAIL_DOMAIN: email
       EMAIL_PASSWORD: password
       EX_PORT: 8081
+  # -----------------------------
   policy-service:
-    image: gcr.io/mdm-mx/policy-service:latest
+    build:
+      context: ./../policy-service
+      dockerfile: ./../policy-service/dockerfile
     ports:
       - "8083:80"
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
     environment:
       EX_PORT: 8083
+
+  # -----------------------------
   device-service:
-    image: gcr.io/mdm-mx/device-service:latest
+    build:
+      context: ./../device-service
+      dockerfile: ./../device-service/dockerfile
     ports:
       - "8084:80"
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
     environment:
       EX_PORT: 8084
+
+  # -----------------------------
   enrollment-service:
-    image: gcr.io/mdm-mx/enrollment-service:latest
+    build:
+      context: ./../enrollment-service
+      dockerfile: ./../enrollment-service/dockerfile
     ports:
       - "8085:80"
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
     environment:
       EX_PORT: 8085
+  # -----------------------------
+  configuration-service:
+    build:
+      context: ./../configuration-service
+      dockerfile: ./../configuration-service/dockerfile
+    ports:
+      - "8085:80"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EX_PORT: 8086
+
 volumes:
   postgres_data:
-  # mongodb_data:
+  mongodb_data:

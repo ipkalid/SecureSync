@@ -24,6 +24,6 @@ go.work
 /DataGrip
 */tokens
 */common/
+*/docker-compose.yml
 ./project/docker-compose.yml
-
-
+*.DS_Store
