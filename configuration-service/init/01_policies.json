@@ -1,0 +1,9 @@
+[
+    {
+      "policyName": "TestPolicy",
+      "policyDetails": {
+        "screenCaptureDisabled": true,
+        "cameraDisabled": true
+      }
+    }
+  ]

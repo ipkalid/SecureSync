@@ -23,5 +23,4 @@ COPY --from=builder /app/configuration-service .
 
 
 
-COPY tokens ./tokens/
 CMD ["./configuration-service"]

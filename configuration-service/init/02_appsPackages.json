@@ -1,0 +1,82 @@
+[
+    {
+      "filter": "tasks",
+      "apps": [
+        { "name": "Trello", "package": "com.trello" },
+        { "name": "Asana", "package": "com.asana.app" },
+        { "name": "Jira", "package": "com.atlassian.android.jira.core" },
+        { "name": "Todoist", "package": "com.todoist" },
+        { "name": "Google Keep", "package": "com.google.android.keep" },
+        { "name": "Any.do", "package": "com.anydo" },
+        { "name": "Wunderlist", "package": "com.wunderkinder.wunderlistandroid" },
+        { "name": "Microsoft To Do", "package": "com.microsoft.todos" },
+        { "name": "Remember The Milk", "package": "com.rememberthemilk.MobileRTM" },
+        { "name": "TickTick", "package": "com.ticktick.task" },
+        { "name": "Notion", "package": "notion.id" },
+        { "name": "Evernote", "package": "com.evernote" },
+        { "name": "ClickUp", "package": "com.clickup.app" },
+        { "name": "Airtable", "package": "com.formagrid.mobile" },
+        { "name": "Smartsheet", "package": "com.smartsheet.android" }
+      ]
+    },
+    {
+      "filter": "communications",
+      "apps": [
+        { "name": "Slack", "package": "com.slack" },
+        { "name": "Microsoft Teams", "package": "com.microsoft.teams" },
+        { "name": "Zoom", "package": "us.zoom.videomeetings" },
+        { "name": "Skype", "package": "com.skype.raider" },
+        { "name": "WhatsApp", "package": "com.whatsapp" },
+        { "name": "Telegram", "package": "org.telegram.messenger" },
+        { "name": "Signal", "package": "org.thoughtcrime.securesms" },
+        { "name": "Viber", "package": "com.viber.voip" },
+        { "name": "WeChat", "package": "com.tencent.mm" },
+        { "name": "Line", "package": "jp.naver.line.android" },
+        { "name": "Google Meet", "package": "com.google.android.apps.tachyon" },
+        { "name": "Google Chat", "package": "com.google.android.apps.dynamite" },
+        { "name": "Discord", "package": "com.discord" },
+        { "name": "Messenger", "package": "com.facebook.orca" },
+        { "name": "Instagram", "package": "com.instagram.android" }
+      ]
+    },
+    {
+      "filter": "social",
+      "apps": [
+        { "name": "Facebook", "package": "com.facebook.katana" },
+        { "name": "Twitter", "package": "com.twitter.android" },
+        { "name": "LinkedIn", "package": "com.linkedin.android" },
+        { "name": "Snapchat", "package": "com.snapchat.android" },
+        { "name": "Pinterest", "package": "com.pinterest" },
+        { "name": "Reddit", "package": "com.reddit.frontpage" },
+        { "name": "Tumblr", "package": "com.tumblr" },
+        { "name": "TikTok", "package": "com.zhiliaoapp.musically" },
+        { "name": "Quora", "package": "com.quora.android" },
+        { "name": "Clubhouse", "package": "com.clubhouse.app" },
+        { "name": "Periscope", "package": "tv.periscope.android" },
+        { "name": "Byte", "package": "co.byte" },
+        { "name": "Houseparty", "package": "com.herzick.houseparty" },
+        { "name": "Meetup", "package": "com.meetup" },
+        { "name": "Nextdoor", "package": "com.nextdoor" }
+      ]
+    },
+    {
+      "filter": "utilities",
+      "apps": [
+        { "name": "Dropbox", "package": "com.dropbox.android" },
+        { "name": "Google Drive", "package": "com.google.android.apps.docs" },
+        { "name": "OneDrive", "package": "com.microsoft.skydrive" },
+        { "name": "Adobe Acrobat", "package": "com.adobe.reader" },
+        { "name": "Google Keep", "package": "com.google.android.keep" },
+        { "name": "Evernote", "package": "com.evernote" },
+        { "name": "OneNote", "package": "com.microsoft.office.onenote" },
+        { "name": "Notion", "package": "notion.id" },
+        { "name": "Todoist", "package": "com.todoist" },
+        { "name": "Wunderlist", "package": "com.wunderkinder.wunderlistandroid" },
+        { "name": "LastPass", "package": "com.lastpass.lpandroid" },
+        { "name": "1Password", "package": "com.agilebits.onepassword" },
+        { "name": "Bitwarden", "package": "com.x8bit.bitwarden" },
+        { "name": "Dashlane", "package": "com.dashlane" },
+        { "name": "Authy", "package": "com.authy.authy" }
+      ]
+    }
+  ]
