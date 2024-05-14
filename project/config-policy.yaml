@@ -1,0 +1,202 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-init-script
+data:
+  01_policies.json: |
+    [
+      {
+        "policyName": "TestPolicy",
+        "policyDetails": {
+          "screenCaptureDisabled": true,
+          "cameraDisabled": true
+        }
+      }
+    ]
+  02_appsPackages.json: |
+    [
+      {
+        "filter": "tasks",
+        "apps": [
+          { "name": "Trello", "package": "com.trello" },
+          { "name": "Asana", "package": "com.asana.app" },
+          { "name": "Jira", "package": "com.atlassian.android.jira.core" },
+          { "name": "Todoist", "package": "com.todoist" },
+          { "name": "Google Keep", "package": "com.google.android.keep" },
+          { "name": "Any.do", "package": "com.anydo" },
+          { "name": "Wunderlist", "package": "com.wunderkinder.wunderlistandroid" },
+          { "name": "Microsoft To Do", "package": "com.microsoft.todos" },
+          { "name": "Remember The Milk", "package": "com.rememberthemilk.MobileRTM" },
+          { "name": "TickTick", "package": "com.ticktick.task" },
+          { "name": "Notion", "package": "notion.id" },
+          { "name": "Evernote", "package": "com.evernote" },
+          { "name": "ClickUp", "package": "com.clickup.app" },
+          { "name": "Airtable", "package": "com.formagrid.mobile" },
+          { "name": "Smartsheet", "package": "com.smartsheet.android" }
+        ]
+      },
+      {
+        "filter": "communications",
+        "apps": [
+          { "name": "Slack", "package": "com.slack" },
+          { "name": "Microsoft Teams", "package": "com.microsoft.teams" },
+          { "name": "Zoom", "package": "us.zoom.videomeetings" },
+          { "name": "Skype", "package": "com.skype.raider" },
+          { "name": "WhatsApp", "package": "com.whatsapp" },
+          { "name": "Telegram", "package": "org.telegram.messenger" },
+          { "name": "Signal", "package": "org.thoughtcrime.securesms" },
+          { "name": "Viber", "package": "com.viber.voip" },
+          { "name": "WeChat", "package": "com.tencent.mm" },
+          { "name": "Line", "package": "jp.naver.line.android" },
+          { "name": "Google Meet", "package": "com.google.android.apps.tachyon" },
+          { "name": "Google Chat", "package": "com.google.android.apps.dynamite" },
+          { "name": "Discord", "package": "com.discord" },
+          { "name": "Messenger", "package": "com.facebook.orca" },
+          { "name": "Instagram", "package": "com.instagram.android" }
+        ]
+      },
+      {
+        "filter": "social",
+        "apps": [
+          { "name": "Facebook", "package": "com.facebook.katana" },
+          { "name": "Twitter", "package": "com.twitter.android" },
+          { "name": "LinkedIn", "package": "com.linkedin.android" },
+          { "name": "Snapchat", "package": "com.snapchat.android" },
+          { "name": "Pinterest", "package": "com.pinterest" },
+          { "name": "Reddit", "package": "com.reddit.frontpage" },
+          { "name": "Tumblr", "package": "com.tumblr" },
+          { "name": "TikTok", "package": "com.zhiliaoapp.musically" },
+          { "name": "Quora", "package": "com.quora.android" },
+          { "name": "Clubhouse", "package": "com.clubhouse.app" },
+          { "name": "Periscope", "package": "tv.periscope.android" },
+          { "name": "Byte", "package": "co.byte" },
+          { "name": "Houseparty", "package": "com.herzick.houseparty" },
+          { "name": "Meetup", "package": "com.meetup" },
+          { "name": "Nextdoor", "package": "com.nextdoor" }
+        ]
+      },
+      {
+        "filter": "utilities",
+        "apps": [
+          { "name": "Dropbox", "package": "com.dropbox.android" },
+          { "name": "Google Drive", "package": "com.google.android.apps.docs" },
+          { "name": "OneDrive", "package": "com.microsoft.skydrive" },
+          { "name": "Adobe Acrobat", "package": "com.adobe.reader" },
+          { "name": "Google Keep", "package": "com.google.android.keep" },
+          { "name": "Evernote", "package": "com.evernote" },
+          { "name": "OneNote", "package": "com.microsoft.office.onenote" },
+          { "name": "Notion", "package": "notion.id" },
+          { "name": "Todoist", "package": "com.todoist" },
+          { "name": "Wunderlist", "package": "com.wunderkinder.wunderlistandroid" },
+          { "name": "LastPass", "package": "com.lastpass.lpandroid" },
+          { "name": "1Password", "package": "com.agilebits.onepassword" },
+          { "name": "Bitwarden", "package": "com.x8bit.bitwarden" },
+          { "name": "Dashlane", "package": "com.dashlane" },
+          { "name": "Authy", "package": "com.authy.authy" }
+        ]
+      }
+    ]
+  03_customConfigurations.json: |
+    [
+      {
+        "name": "TestConfig",
+        "value": "TestValue"
+      }
+    ]
+  04_deviceSettings.json: |
+    [
+      { "name": "screenCaptureDisabled", "value": true, "friendlyName": "Disable Screen Capture" },
+      { "name": "cameraDisabled", "value": true, "friendlyName": "Disable Camera" },
+      { "name": "keyguardDisabledFeatures", "value": ["DISABLE_FINGERPRINT", "DISABLE_TRUST_AGENTS"], "friendlyName": "Disable Keyguard Features" },
+      { "name": "defaultPermissionPolicy", "value": "PROMPT", "friendlyName": "Default Permission Policy" },
+      { "name": "addUserDisabled", "value": true, "friendlyName": "Disable Add User" },
+      { "name": "adjustVolumeDisabled", "value": true, "friendlyName": "Disable Volume Adjustment" },
+      { "name": "factoryResetDisabled", "value": true, "friendlyName": "Disable Factory Reset" },
+      { "name": "installAppsDisabled", "value": true, "friendlyName": "Disable App Installation" },
+      { "name": "mountPhysicalMediaDisabled", "value": true, "friendlyName": "Disable Mount Physical Media" },
+      { "name": "modifyAccountsDisabled", "value": true, "friendlyName": "Disable Modify Accounts" },
+      { "name": "safeBootDisabled", "value": true, "friendlyName": "Disable Safe Boot" },
+      { "name": "uninstallAppsDisabled", "value": true, "friendlyName": "Disable App Uninstallation" },
+      { "name": "statusBarDisabled", "value": true, "friendlyName": "Disable Status Bar" },
+      { "name": "keyguardDisabled", "value": true, "friendlyName": "Disable Keyguard" },
+      { "name": "vpnConfigDisabled", "value": true, "friendlyName": "Disable VPN Configuration" },
+      { "name": "wifiConfigDisabled", "value": true, "friendlyName": "Disable Wi-Fi Configuration" },
+      { "name": "usbFileTransferDisabled", "value": true, "friendlyName": "Disable USB File Transfer" },
+      { "name": "smsDisabled", "value": true, "friendlyName": "Disable SMS" },
+      { "name": "dataRoamingDisabled", "value": true, "friendlyName": "Disable Data Roaming" },
+      { "name": "locationMode", "value": "HIGH_ACCURACY", "friendlyName": "Location Mode: High Accuracy" },
+      { "name": "bluetoothConfigDisabled", "value": true, "friendlyName": "Disable Bluetooth Configuration" },
+      { "name": "cellBroadcastsConfigDisabled", "value": true, "friendlyName": "Disable Cell Broadcasts Configuration" },
+      { "name": "credentialsConfigDisabled", "value": true, "friendlyName": "Disable Credentials Configuration" },
+      { "name": "networkEscapeHatchDisabled", "value": true, "friendlyName": "Disable Network Escape Hatch" },
+      { "name": "outgoingCallsDisabled", "value": true, "friendlyName": "Disable Outgoing Calls" },
+      { "name": "removeUserDisabled", "value": true, "friendlyName": "Disable Remove User" },
+      { "name": "shareLocationDisabled", "value": true, "friendlyName": "Disable Share Location" },
+      { "name": "wifiTetheringDisabled", "value": true, "friendlyName": "Disable Wi-Fi Tethering" },
+      { "name": "createWindowsDisabled", "value": true, "friendlyName": "Disable Create Windows" },
+      { "name": "autoTimeRequired", "value": true, "friendlyName": "Require Auto Time" },
+      { "name": "passwordMinimumLength", "value": 8, "friendlyName": "Minimum Password Length" },
+      { "name": "passwordMinimumLetters", "value": 1, "friendlyName": "Minimum Password Letters" },
+      { "name": "passwordMinimumLowerCase", "value": 1, "friendlyName": "Minimum Password Lower Case Letters" },
+      { "name": "passwordMinimumNonLetter", "value": 1, "friendlyName": "Minimum Password Non-Letter Characters" },
+      { "name": "passwordMinimumNumeric", "value": 1, "friendlyName": "Minimum Password Numeric Characters" },
+      { "name": "passwordMinimumSymbols", "value": 1, "friendlyName": "Minimum Password Symbols" },
+      { "name": "passwordMinimumUpperCase", "value": 1, "friendlyName": "Minimum Password Upper Case Letters" },
+      { "name": "passwordQuality", "value": "COMPLEX", "friendlyName": "Password Quality: Complex" },
+      { "name": "passwordExpirationTimeout", "value": "30d", "friendlyName": "Password Expiration Timeout" },
+      { "name": "passwordHistoryLength", "value": 5, "friendlyName": "Password History Length" },
+      { "name": "maxFailedPasswordsForWipe", "value": 10, "friendlyName": "Max Failed Passwords for Wipe" },
+      { "name": "requirePasswordUnlock", "value": "DEFAULT", "friendlyName": "Require Password Unlock" },
+      { "name": "encryptionPolicy", "value": "ENCRYPTION_POLICY_UNSPECIFIED", "friendlyName": "Encryption Policy" },
+      { "name": "disabledKeyguardFeatures", "value": ["DISABLE_FINGERPRINT", "DISABLE_TRUST_AGENTS"], "friendlyName": "Disabled Keyguard Features" },
+      { "name": "disableScreenLock", "value": true, "friendlyName": "Disable Screen Lock" },
+      { "name": "disableStatusBar", "value": true, "friendlyName": "Disable Status Bar" },
+      { "name": "enableLockTask", "value": true, "friendlyName": "Enable Lock Task" },
+      { "name": "persistentPreferredActivities", "value": [], "friendlyName": "Persistent Preferred Activities" },
+      { "name": "stayOnPluggedModes", "value": ["AC"], "friendlyName": "Stay On Plugged Modes" },
+      { "name": "usbMassStorageEnabled", "value": false, "friendlyName": "USB Mass Storage Enabled" },
+      { "name": "outgoingBeamDisabled", "value": true, "friendlyName": "Disable Outgoing Beam" },
+      { "name": "wifiSleepPolicy", "value": "SLEEP_POLICY_NEVER_WHILE_PLUGGED", "friendlyName": "Wi-Fi Sleep Policy" },
+      { "name": "autoUpdatePolicy", "value": "AUTO_UPDATE_HIGH_PRIORITY", "friendlyName": "Auto Update Policy" },
+      { "name": "recommendedGlobalProxy", "value": { "host": "proxy.example.com", "port": 8080 }, "friendlyName": "Recommended Global Proxy" },
+      { "name": "privateDnsMode", "value": "OPPORTUNISTIC", "friendlyName": "Private DNS Mode" },
+      { "name": "privateDnsHostname", "value": "dns.example.com", "friendlyName": "Private DNS Hostname" },
+      { "name": "bluetoothContactSharingDisabled", "value": true, "friendlyName": "Disable Bluetooth Contact Sharing" },
+      { "name": "bluetoothDisabled", "value": true, "friendlyName": "Disable Bluetooth" },
+      { "name": "debuggingFeaturesAllowed", "value": false, "friendlyName": "Allow Debugging Features" },
+      { "name": "appAutoUpdatePolicy", "value": "AUTO_UPDATE_UNMETERED_ONLY", "friendlyName": "App Auto Update Policy" },
+      { "name": "ensureVerifyAppsEnabled", "value": true, "friendlyName": "Ensure Verify Apps Enabled" },
+      { "name": "permittedInputMethods", "value": ["com.google.android.inputmethod.latin", "com.swiftkey.swiftkey"], "friendlyName": "Permitted Input Methods" },
+      { "name": "persistentPreferredActivities", "value": [{"receiverActivity": "com.google.android.apps.docs/.upload.UploadServiceActivity"}], "friendlyName": "Persistent Preferred Activities" },
+      { "name": "stayOnPluggedModes", "value": ["AC", "USB"], "friendlyName": "Stay On Plugged Modes" },
+      { "name": "systemUpdate", "value": {"type": "WINDOWED", "start": "00:00", "end": "02:00"}, "friendlyName": "System Update" },
+      { "name": "personalUsagePolicies", "value": {"cameraDisabled": true, "screenCaptureDisabled": true}, "friendlyName": "Personal Usage Policies" },
+      { "name": "openNetworkConfiguration", "value": {"NetworkConfigurations": []}, "friendlyName": "Open Network Configuration" },
+      { "name": "playStoreMode", "value": "WHITELIST", "friendlyName": "Play Store Mode" },
+      { "name": "removeUserDisabled", "value": true, "friendlyName": "Disable Remove User" },
+      { "name": "systemUpdate", "value": {"type": "WINDOWED", "start": "23:00", "end": "04:00"}, "friendlyName": "System Update" },
+      { "name": "bluetoothContactSharingDisabled", "value": true, "friendlyName": "Disable Bluetooth Contact Sharing" },
+      { "name": "androidDeviceOwnerLockTaskFeatures", "value": ["HOME", "OVERVIEW", "NOTIFICATIONS"], "friendlyName": "Android Device Owner Lock Task Features" },
+      { "name": "complianceRules", "value": [{"condition": {"apiLevelCondition": {"minApiLevel": 23}}, "action": "WIPE"}], "friendlyName": "Compliance Rules" },
+      { "name": "passwordPolicies", "value": [{"passwordMinimumLength": 8, "passwordQuality": "COMPLEX"}], "friendlyName": "Password Policies" },
+      { "name": "passwordComplexity", "value": "COMPLEX", "friendlyName": "Password Complexity" },
+      { "name": "advancedSecurityOverrides", "value": {"untrustedAppsPolicy": "BLOCK", "securityPosture": "STRONG"}, "friendlyName": "Advanced Security Overrides" }
+    ]
+  init-mongo.js: |
+    db = db.getSiblingDB('admin');
+    if (db.system.users.find({user: "root"}).count() == 0) {
+      db.createUser({
+        user: "root",
+        pwd: "example",
+        roles: [ { role: "root", db: "admin" }, { role: "readWrite", db: "policiesconfig" } ]
+      });
+    }
+    db = db.getSiblingDB('policiesconfig');
+    db.policies.drop();
+    db.policies.insertMany(require('/docker-entrypoint-initdb.d/01_policies.json'));
+    db.appsPackages.drop();
+    db.appsPackages.insertMany(require('/docker-entrypoint-initdb.d/02_appsPackages.json'));
+    db.customConfigurations.drop();
+    db.customConfigurations.insertMany(require('/docker-entrypoint-initdb.d/03_customConfigurations.json'));
+    db.deviceSettings.drop();
+    db.deviceSettings.insertMany(require('/docker-entrypoint-initdb.d/04_deviceSettings.json'));

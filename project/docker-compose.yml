@@ -1,16 +1,16 @@
 version: '3.8'
 services:
-
   mongodb:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: secure_sync
+      MONGO_INITDB_DATABASE: policiesconfig
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    restart: always
   # -----------------------------
   db:
     image: postgres:latest
@@ -104,13 +104,11 @@ services:
       context: ./../configuration-service
       dockerfile: ./../configuration-service/dockerfile
     ports:
-      - "8085:80"
+      - "8087:80"
     restart: always
-    deploy:
-      mode: replicated
-      replicas: 1
     environment:
-      EX_PORT: 8086
+      EX_PORT: 80
+      MONGO_URI: mongodb://root:example@mongodb:27017/policiesconfig
 
 volumes:
   postgres_data:

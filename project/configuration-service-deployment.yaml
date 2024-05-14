@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configuration-service
+  labels:
+    app: configuration-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configuration-service
+  template:
+    metadata:
+      labels:
+        app: configuration-service
+    spec:
+      containers:
+      - name: configuration-service
+        image: gcr.io/mdm-mx/configuration-service:latest
+        ports:
+        - containerPort: 80
+          hostPort: 80
+          protocol: TCP
+        env:
+        - name: EX_PORT
+          value: "80"
+        - name: MONGO_URI
+          value: "mongodb://root:example@mongodb.default.svc.cluster.local:27017/policiesconfig"

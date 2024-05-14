@@ -1,45 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.33.0 (HEAD)
-  labels:
-    io.kompose.service: mongodb
   name: mongodb
+  labels:
+    app: mongodb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: mongodb
-  strategy:
-    type: Recreate
+      app: mongodb
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml
-        kompose.version: 1.33.0 (HEAD)
       labels:
-        io.kompose.network/project-default: "true"
-        io.kompose.service: mongodb
+        app: mongodb
     spec:
       containers:
-        - env:
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: example
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: root
-          image: mongo:latest
-          name: mongodb
-          ports:
-            - containerPort: 27017
-              hostPort: 27017
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /data/db
-              name: mongodb-data
-      restartPolicy: Always
+      - name: mongodb
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: example
+        - name: MONGO_INITDB_DATABASE
+          value: admin
+        volumeMounts:
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
       volumes:
-        - name: mongodb-data
-          persistentVolumeClaim:
-            claimName: mongodb-data
+      - name: init-script
+        configMap:
+          name: mongodb-init-script
