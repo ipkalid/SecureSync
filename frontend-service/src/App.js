@@ -1,272 +1,198 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  NavLink,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Toolbar,
-  Grid,
-  AppBar,
-  Drawer,
-  IconButton,
-  Typography,
-  Button,
-} from "@mui/material";
-import Dashboard from "./screens/Dashboard";
-import DeviceManagement from "./screens/DeviceManagement";
-import PolicyManagement from "./screens/PolicyManagement";
-import DeviceTracking from "./screens/DeviceTracking";
-import OrderList from "./screens/OrderList";
-import ProductStock from "./screens/ProductStock";
-import Settings from "./screens/Settings";
-import LogOff from "./screens/LogOff";
-import LoginForm from "./screens/LoginForm";
-import SignupForm from "./screens/SignupForm";
-import PasswordResetForm from "./screens/PasswordResetForm";
-import NavBar from "./screens/Navbar";
-import MenuIcon from "@mui/icons-material/Menu";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import DeviceHubIcon from "@mui/icons-material/DeviceHub"; // Replace with actual icon for Device Management
-import PolicyIcon from "@mui/icons-material/Policy"; // Replace with actual icon for Policy Management
-import TrackChangesIcon from "@mui/icons-material/TrackChanges"; // Replace with actual icon for Device Tracking
-import ListAltIcon from "@mui/icons-material/ListAlt"; // Replace with actual icon for Order List
-import InventoryIcon from "@mui/icons-material/Inventory";
-import { blue, green } from "@mui/material/colors";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LogoutIcon from "@mui/icons-material/Logout";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import LandingPage from "./screens/LandingPage";
-const drawerWidth = 240;
+/**
+=========================================================
+* Material Dashboard 2 React - v2.2.0
+=========================================================
 
-const theme = createTheme({
-  typography: {
-    fontFamily: '"Fira Code", monospace',
-  },
-});
+* Product Page: https://www.creative-tim.com/product/material-dashboard-react
+* Copyright 2023 Creative Tim (https://www.creative-tim.com)
 
-export function PrivateRoute({ children }) {
-  const token = localStorage.getItem("token");
+Coded by www.creative-tim.com
 
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
+ =========================================================
 
-  return children;
-}
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+*/
 
-function App() {
-  const token = localStorage.getItem("token");
+import { useState, useEffect, useMemo } from "react";
 
-  const handleLogin = (credentials) => {
-    // handle login
+// react-router components
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+
+// @mui material components
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Icon from "@mui/material/Icon";
+
+// Material Dashboard 2 React components
+import MDBox from "components/MDBox";
+
+// Material Dashboard 2 React example components
+import Sidenav from "examples/Sidenav";
+import Configurator from "examples/Configurator";
+
+// Material Dashboard 2 React themes
+import theme from "assets/theme";
+import themeRTL from "assets/theme/theme-rtl";
+
+// Material Dashboard 2 React Dark Mode themes
+import themeDark from "assets/theme-dark";
+import themeDarkRTL from "assets/theme-dark/theme-rtl";
+
+// RTL plugins
+import rtlPlugin from "stylis-plugin-rtl";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+
+// Material Dashboard 2 React routes
+import routes from "routes";
+
+// Material Dashboard 2 React contexts
+import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+
+// Images
+import brandWhite from "assets/images/logo-ct.png";
+import brandDark from "assets/images/logo-ct-dark.png";
+
+export default function App() {
+  const [controller, dispatch] = useMaterialUIController();
+  const {
+    miniSidenav,
+    direction,
+    layout,
+    openConfigurator,
+    sidenavColor,
+    transparentSidenav,
+    whiteSidenav,
+    darkMode,
+  } = controller;
+  const [onMouseEnter, setOnMouseEnter] = useState(false);
+  const [rtlCache, setRtlCache] = useState(null);
+  const { pathname } = useLocation();
+
+  // Cache for the rtl
+  useMemo(() => {
+    const cacheRtl = createCache({
+      key: "rtl",
+      stylisPlugins: [rtlPlugin],
+    });
+
+    setRtlCache(cacheRtl);
+  }, []);
+
+  // Open sidenav when mouse enter on mini sidenav
+  const handleOnMouseEnter = () => {
+    if (miniSidenav && !onMouseEnter) {
+      setMiniSidenav(dispatch, false);
+      setOnMouseEnter(true);
+    }
   };
 
-  const handleSignup = (credentials) => {
-    // handle signup
+  // Close sidenav when mouse leave mini sidenav
+  const handleOnMouseLeave = () => {
+    if (onMouseEnter) {
+      setMiniSidenav(dispatch, true);
+      setOnMouseEnter(false);
+    }
   };
 
-  const handlePasswordReset = (email) => {
-    // handle password reset
-  };
+  // Change the openConfigurator state
+  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Grid container>
-          <Grid item xs={12}>
-            <NavBar />
-          </Grid>
+  // Setting the dir attribute for the body element
+  useEffect(() => {
+    document.body.setAttribute("dir", direction);
+  }, [direction]);
 
-          {token && (
-            <Grid item xs={2}>
-              <Drawer
-                variant="permanent"
-                sx={{
-                  width: drawerWidth,
-                  flexShrink: 0,
-                  "& .MuiDrawer-paper": {
-                    width: drawerWidth,
-                    boxSizing: "border-box",
-                    backgroundColor: "#212121", // Drawer background color
-                    color: "white", // Text color
-                  },
-                }}
-              >
-                <Toolbar sx={{ backgroundColor: blue[700], color: "white" }}>
-                  <Typography variant="h6" noWrap component="div">
-                    SecureSync
-                  </Typography>
-                </Toolbar>
-                <List>
-                  {[
-                    "Dashboard",
-                    "Device Management",
-                    "Policy Management",
-              
-                  ].map((text, index) => (
-                    <ListItem
-                      button
-                      key={text}
-                      component={NavLink}
-                      to={`/${text.toLowerCase().replace(/\s+/g, "-")}`}
-                      sx={{ "&.active": { backgroundColor: blue[500] } }}
-                    >
-                      <ListItemIcon>
-                        {/* You will replace this switch statement with the actual icons you want to use */}
-                        {index === 0 && (
-                          <DashboardIcon sx={{ color: "white" }} />
-                        )}
-                        {index === 1 && (
-                          <DeviceHubIcon sx={{ color: "white" }} />
-                        )}
-                        {index === 2 && <PolicyIcon sx={{ color: "white" }} />}
-                        {index === 3 && (
-                          <InventoryIcon sx={{ color: "white" }} />
-                        )}
-                        {index === 4 && (
-                          <SettingsIcon sx={{ color: "white" }} />
-                        )}
-                        {/* ... other icons */}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Drawer>
-            </Grid>
-          )}
+  // Setting page scroll to 0 when changing the route
+  useEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.scrollingElement.scrollTop = 0;
+  }, [pathname]);
 
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <LandingPage />
-                </div>
-              }
-            />
+  const getRoutes = (allRoutes) =>
+    allRoutes.map((route) => {
+      if (route.collapse) {
+        return getRoutes(route.collapse);
+      }
 
-            <Route
-              path="/login"
-              element={
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <LoginForm onLogin={handleLogin} />
-                </div>
-              }
+      if (route.route) {
+        return <Route exact path={route.route} element={route.component} key={route.key} />;
+      }
+
+      return null;
+    });
+
+  const configsButton = (
+    <MDBox
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="3.25rem"
+      height="3.25rem"
+      bgColor="white"
+      shadow="sm"
+      borderRadius="50%"
+      position="fixed"
+      right="2rem"
+      bottom="2rem"
+      zIndex={99}
+      color="dark"
+      sx={{ cursor: "pointer" }}
+      onClick={handleConfiguratorOpen}
+    >
+      <Icon fontSize="small" color="inherit">
+        settings
+      </Icon>
+    </MDBox>
+  );
+
+  return direction === "rtl" ? (
+    <CacheProvider value={rtlCache}>
+      <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
+        <CssBaseline />
+        {layout === "dashboard" && (
+          <>
+            <Sidenav
+              color={sidenavColor}
+              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+              brandName="SecureSync"
+              routes={routes}
+              onMouseEnter={handleOnMouseEnter}
+              onMouseLeave={handleOnMouseLeave}
             />
-            <Route
-              path="/signup"
-              element={
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <SignupForm onSignup={handleSignup} />
-                </div>
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <PasswordResetForm onPasswordReset={handlePasswordReset} />
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/device-management"
-              element={
-                <PrivateRoute>
-                  <DeviceManagement />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/device-tracking"
-              element={
-                <PrivateRoute>
-                  <DeviceTracking />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/policy-management"
-              element={
-                <PrivateRoute>
-                  <PolicyManagement />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/order-list"
-              element={
-                <PrivateRoute>
-                  <OrderList />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/product-stock"
-              element={
-                <PrivateRoute>
-                  <ProductStock />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <PrivateRoute>
-                  <Settings />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/logoff"
-              element={
-                <PrivateRoute>
-                  <LogOff />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </Grid>
-      </Router>
+            <Configurator />
+            {configsButton}
+          </>
+        )}
+        {layout === "vr" && <Configurator />}
+        <Routes>
+          {getRoutes(routes)}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </ThemeProvider>
+    </CacheProvider>
+  ) : (
+    <ThemeProvider theme={darkMode ? themeDark : theme}>
+      <CssBaseline />
+      {layout === "dashboard" && (
+        <>
+          <Sidenav
+            color={sidenavColor}
+            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+            brandName="SecureSync"
+            routes={routes}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          />
+          <Configurator />
+          {configsButton}
+        </>
+      )}
+      {layout === "vr" && <Configurator />}
+      <Routes>
+        {getRoutes(routes)}
+        <Route path="*" element={<Navigate to="/dashboard" />} />
+      </Routes>
     </ThemeProvider>
   );
 }
-
-export default App;
